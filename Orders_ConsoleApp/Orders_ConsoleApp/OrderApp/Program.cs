@@ -1,4 +1,6 @@
-﻿namespace OrderApp
+﻿using Orders_ConsoleApp.Utils;
+
+namespace OrderApp
 {
     public class Program
     {
