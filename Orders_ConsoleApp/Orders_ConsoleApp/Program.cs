@@ -2,17 +2,6 @@
 {
     public class Program
     {
-        private const string Laptop = "Laptop";
-        private const string Keyboard = "Keyboard";
-        private const string Mouse = "Mouse";
-        private const string Monitor = "Monitor";
-        private const string Duck = "Debugging Duck";
-
-        private const string AddProductOption = "1";
-        private const string RemoveProductOption = "2";
-        private const string DisplayOrderValueOption = "3";
-        private const string ExitOption = "4";
-
         public static void Main()
         {
             var products = InitializeProducts();
@@ -38,11 +27,11 @@
         {
             return new List<Product>
             {
-                new Product(Laptop, 2500),
-                new Product(Keyboard, 120),
-                new Product(Mouse, 90),
-                new Product(Monitor, 1000),
-                new Product(Duck, 66)
+                new Product(ProductConstants.Laptop, 2500),
+                new Product(ProductConstants.Keyboard, 120),
+                new Product(ProductConstants.Mouse, 90),
+                new Product(ProductConstants.Monitor, 1000),
+                new Product(ProductConstants.Duck, 66)
             };
         }
 
@@ -66,27 +55,28 @@
         private static void ShowMenu()
         {
             Console.WriteLine("Menu:");
-            Console.WriteLine($"{AddProductOption}. Add Product");
-            Console.WriteLine($"{RemoveProductOption}. Remove Product");
-            Console.WriteLine($"{DisplayOrderValueOption}. Display Order Value");
-            Console.WriteLine($"{ExitOption}. Exit");
-            Console.Write($"Select an option ({AddProductOption}, {RemoveProductOption}, {DisplayOrderValueOption}, {ExitOption}): ");
+            Console.WriteLine($"{MenuConstants.AddProductOption}. Add Product");
+            Console.WriteLine($"{MenuConstants.RemoveProductOption}. Remove Product");
+            Console.WriteLine($"{MenuConstants.DisplayOrderValueOption}. Display Order Value");
+            Console.WriteLine($"{MenuConstants.ExitOption}. Exit");
+            Console.Write($"Select an option " +
+                $"({MenuConstants.AddProductOption}, {MenuConstants.RemoveProductOption}, {MenuConstants.DisplayOrderValueOption}, {MenuConstants.ExitOption}): ");
         }
 
         private static bool HandleMenuOption(string? option, Order order, List<Product> products)
         {
             switch (option)
             {
-                case AddProductOption:
+                case MenuConstants.AddProductOption:
                     AddProductToOrder(order, products);
                     break;
-                case RemoveProductOption:
+                case MenuConstants.RemoveProductOption:
                     RemoveProductFromOrder(order);
                     break;
-                case DisplayOrderValueOption:
+                case MenuConstants.DisplayOrderValueOption:
                     DisplayOrderValue(order);
                     break;
-                case ExitOption:
+                case MenuConstants.ExitOption:
                     return false;
                 default:
                     Console.WriteLine("Invalid option. Please select a valid option.");
