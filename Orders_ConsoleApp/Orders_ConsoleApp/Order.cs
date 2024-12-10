@@ -3,13 +3,14 @@
     public class Order
     {
         private readonly List<OrderItem> _items = new();
+        private readonly ProductComparer _productComparer = new();
 
         public void AddItem(OrderItem addedItem)
         {
             if (addedItem == null)
                 throw new ArgumentNullException(nameof(addedItem), "Added item cannot be null.");
 
-            var existingItem = _items.FirstOrDefault(i => i.Product.Name == i.Product.Name);
+            var existingItem = _items.FirstOrDefault(i => _productComparer.Equals(i.Product, addedItem.Product));
 
             if (existingItem != null)
             {
