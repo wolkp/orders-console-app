@@ -1,1 +1,24 @@
+# Ignore bin and obj directories
+bin/
+obj/
+
+# Ignore bin and obj directories for specific projects
+/Orders_ConsoleApp/bin/
+/Orders_ConsoleApp/obj/
+/Orders_ConsoleApp.Tests/bin/
+/Orders_ConsoleApp.Tests/obj/
+
+# Ignore Visual Studio files
 .vs/
+.vscode/
+
+# Ignore build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]ist/
+
+# Ignore user-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
