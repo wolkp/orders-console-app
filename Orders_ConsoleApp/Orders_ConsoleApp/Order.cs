@@ -4,11 +4,13 @@
     {
         private readonly List<OrderItem> _items = new();
         private readonly ProductComparer _productComparer = new();
-        private readonly List<Discount> _discounts;
+        private readonly List<Discount> _globalDiscounts;
+        private readonly ExclusiveDiscounts _exclusiveDiscounts;
 
-        public Order(List<Discount> discounts)
+        public Order(ExclusiveDiscounts exclusiveDiscounts, List<Discount> globalDiscounts)
         {
-            _discounts = discounts;
+            _exclusiveDiscounts = exclusiveDiscounts;
+            _globalDiscounts = globalDiscounts;
         }
 
         public void AddItem(OrderItem addedItem)
@@ -44,11 +46,36 @@
             return totalPriceDiscounted;
         }
 
+        public void DisplayOrder()
+        {
+            Console.WriteLine("Order details:"); 
+
+            foreach (var item in _items)
+            {
+                Console.WriteLine($"Product: {item.Product.Name}, Quantity: {item.Quantity}, Total: {item.Product.Price * item.Quantity} PLN");
+            }
+        }
+
         private decimal ApplyDiscounts(decimal totalPrice)
         {
-            foreach(var discount in _discounts)
+            var priceAfterExclusiveDiscounts = ApplyExclusiveDiscounts(totalPrice);
+            var priceAfterGlobalDiscounts = ApplyGlobalDiscounts(priceAfterExclusiveDiscounts);
+
+            return priceAfterGlobalDiscounts;
+        }
+
+        private decimal ApplyExclusiveDiscounts(decimal totalPrice)
+        {
+            totalPrice = _exclusiveDiscounts.ApplyBestDiscount(_items, totalPrice);
+
+            return totalPrice;
+        }
+
+        private decimal ApplyGlobalDiscounts(decimal totalPrice)
+        {
+            foreach (var globalDiscount in _globalDiscounts)
             {
-                totalPrice = discount.Apply(_items, totalPrice);
+                totalPrice = globalDiscount.Apply(_items, totalPrice);
             }
 
             return totalPrice;
