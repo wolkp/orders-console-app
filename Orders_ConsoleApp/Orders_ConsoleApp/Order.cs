@@ -4,6 +4,12 @@
     {
         private readonly List<OrderItem> _items = new();
         private readonly ProductComparer _productComparer = new();
+        private readonly List<Discount> _discounts;
+
+        public Order(List<Discount> discounts)
+        {
+            _discounts = discounts;
+        }
 
         public void AddItem(OrderItem addedItem)
         {
@@ -33,6 +39,18 @@
         public decimal CalculateTotalPrice()
         {
             var totalPrice = _items.Sum(i => i.GetTotalPrice());
+            var totalPriceDiscounted = ApplyDiscounts(totalPrice);
+
+            return totalPriceDiscounted;
+        }
+
+        private decimal ApplyDiscounts(decimal totalPrice)
+        {
+            foreach(var discount in _discounts)
+            {
+                totalPrice = discount.Apply(_items, totalPrice);
+            }
+
             return totalPrice;
         }
     }
