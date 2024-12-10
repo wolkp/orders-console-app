@@ -4,29 +4,29 @@
     {
         private readonly List<OrderItem> _items = new();
 
-        public void AddProduct(Product product, int quantity)
+        public void AddItem(OrderItem addedItem)
         {
-            var existingItem = _items.FirstOrDefault(i => i.Product.Name == product.Name);
+            if (addedItem == null)
+                throw new ArgumentNullException(nameof(addedItem), "Added item cannot be null.");
 
-            if(existingItem != null)
+            var existingItem = _items.FirstOrDefault(i => i.Product.Name == i.Product.Name);
+
+            if (existingItem != null)
             {
-                existingItem.Quantity += quantity;
+                existingItem.IncreaseQuantity(addedItem.Quantity);
             }
             else
             {
-                var newItem = new OrderItem(product, quantity);
-                _items.Add(newItem);
+                _items.Add(addedItem);
             }
         }
 
-        public void RemoveProduct(string productName)
+        public void RemoveItem(OrderItem removedItem)
         {
-            var itemToRemove = _items.FirstOrDefault(i => i.Product.Name == productName);
+            if (removedItem == null)
+                throw new ArgumentNullException(nameof(removedItem), "Removed item cannot be null.");
 
-            if (itemToRemove != null)
-            {
-                _items.Remove(itemToRemove);
-            }
+            _items.Remove(removedItem);
         }
 
         public decimal CalculateTotalPrice()
