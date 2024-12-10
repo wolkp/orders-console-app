@@ -7,8 +7,8 @@
 
         public OrderItem(Product product, int quantity)
         {
-            Product = product;
-            Quantity = quantity;
+            Product = product ?? throw new ArgumentNullException(nameof(product), "Product cannot be null.");
+            Quantity = quantity > 0 ? quantity : throw new ArgumentException("Quantity must be greater than zero.");
         }
 
         public decimal GetTotalPrice()

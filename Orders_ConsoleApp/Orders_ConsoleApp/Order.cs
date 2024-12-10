@@ -13,29 +13,48 @@
             _globalDiscounts = globalDiscounts;
         }
 
-        public void AddItem(OrderItem addedItem)
+        public void AddProduct(Product addedProduct, int quantity)
         {
-            if (addedItem == null)
-                throw new ArgumentNullException(nameof(addedItem), "Added item cannot be null.");
+            if (addedProduct == null)
+                throw new ArgumentNullException(nameof(addedProduct), "Added product cannot be null.");
 
-            var existingItem = _items.FirstOrDefault(i => _productComparer.Equals(i.Product, addedItem.Product));
+            if (quantity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be greater than zero.");
+
+            var existingItem = _items.FirstOrDefault(i => _productComparer.Equals(i.Product, addedProduct));
 
             if (existingItem != null)
             {
-                existingItem.IncreaseQuantity(addedItem.Quantity);
+                existingItem.IncreaseQuantity(quantity);
             }
             else
             {
-                _items.Add(addedItem);
+                var newOrderItem = new OrderItem(addedProduct, quantity);
+                _items.Add(newOrderItem);
             }
         }
 
-        public void RemoveItem(OrderItem removedItem)
+        public void RemoveProduct(Product removedProduct, int quantity)
         {
-            if (removedItem == null)
-                throw new ArgumentNullException(nameof(removedItem), "Removed item cannot be null.");
+            if (removedProduct == null)
+                throw new ArgumentNullException(nameof(removedProduct), "Removed product cannot be null.");
 
-            _items.Remove(removedItem);
+            if (quantity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be greater than zero.");
+
+            var existingItem = _items.FirstOrDefault(i => _productComparer.Equals(i.Product, removedProduct));
+
+            if (existingItem == null)
+                throw new InvalidOperationException("Product not found in the order.");
+
+            if (quantity >= existingItem.Quantity)
+            {
+                _items.Remove(existingItem);
+            }
+            else
+            {
+                existingItem.DecreaseQuantity(quantity);
+            }
         }
 
         public decimal CalculateTotalPrice()
