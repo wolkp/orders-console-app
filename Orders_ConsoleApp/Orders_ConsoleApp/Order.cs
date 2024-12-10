@@ -2,6 +2,8 @@
 { 
     public class Order
     {
+        public IReadOnlyList<OrderItem> Items => _items.AsReadOnly();
+
         private readonly List<OrderItem> _items = new();
         private readonly ProductComparer _productComparer = new();
         private readonly List<Discount> _globalDiscounts;
@@ -11,6 +13,22 @@
         {
             _exclusiveDiscounts = exclusiveDiscounts;
             _globalDiscounts = globalDiscounts;
+        }
+
+        public Product? GetProductByName(string productName)
+        {
+            return _items
+                .Select(item => item.Product)
+                .FirstOrDefault(p => p.Name.Equals(productName, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public int GetProductQuantity(Product product)
+        {
+            if (product == null)
+                throw new ArgumentNullException(nameof(product), "Product cannot be null.");
+
+            var item = _items.FirstOrDefault(i => i.Product.Equals(product));
+            return item?.Quantity ?? 0;
         }
 
         public void AddProduct(Product addedProduct, int quantity)
