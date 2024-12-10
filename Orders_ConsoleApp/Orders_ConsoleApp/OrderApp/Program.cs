@@ -1,6 +1,4 @@
-﻿using Orders_ConsoleApp.Utils;
-
-namespace OrderApp
+﻿namespace OrderApp
 {
     public class Program
     {
@@ -104,9 +102,17 @@ namespace OrderApp
         private static void DisplayCurrentOrder(Order order)
         {
             Console.WriteLine("Current order:");
-            foreach (var item in order.Items)
+
+            if(order.Items.Any())
             {
-                Console.WriteLine($"- {item.Product.Name} x{item.Quantity} ({item.Product.Price} PLN each)");
+                foreach (var item in order.Items)
+                {
+                    Console.WriteLine($"- {item.Product.Name} x{item.Quantity} ({item.Product.Price} PLN each)");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Order is empty.");
             }
             Console.WriteLine();
         }

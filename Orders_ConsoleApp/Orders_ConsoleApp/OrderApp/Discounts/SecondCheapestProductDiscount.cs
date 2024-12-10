@@ -6,11 +6,20 @@
 
         public override decimal Apply(List<OrderItem> items, decimal totalPrice)
         {
-            var sortedItems = items.OrderBy(item => item.Product.Price).ToList();
-
-            if (sortedItems.Count >= 2)
+            var expandedList = new List<OrderItem>();
+            foreach(var item in items)
             {
-                var secondCheapestItem = sortedItems[1];
+                for(var i = 0; i < item.Quantity; i++)
+                {
+                    expandedList.Add(item);
+                }
+            }
+
+            var sortedItems = expandedList.OrderBy(item => item.Product.Price).ToList();
+
+            if (sortedItems.Count == 2)
+            {
+                var secondCheapestItem = sortedItems.First();
                 var discount = GetDiscountedPrice(secondCheapestItem.Product.Price);
                 totalPrice -= discount;
             }
